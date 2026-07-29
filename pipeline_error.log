@@ -1,0 +1,4 @@
+2026-07-29 12:29:15,634 - ERROR - Erreur de chargement csv Superstore 'utf-8' codec can't decode byte 0xa0 in position 2969: invalid start byte
+2026-07-29 12:29:15,634 - ERROR - Erreur pipeline : Aucun fichier valider
+2026-07-29 12:35:03,260 - ERROR - Erreur de chargement csv Superstore 'utf-8' codec can't decode byte 0xa0 in position 2969: invalid start byte
+2026-07-29 12:35:03,260 - ERROR - Erreur pipeline : Aucun fichier valider
