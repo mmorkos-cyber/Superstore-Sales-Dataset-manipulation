@@ -1,14 +1,19 @@
 import pandas as pd
 import os
-import logging as lg
+import sys
 
 dossier_root =  os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(dossier_root)
+
+from utils.logger import get_logger
+
+
 dossier_raw = os.path.join(dossier_root, "raw_data")
 
 fichier_superstore = os.path.join(dossier_raw, "Superstore.csv")
-fichier_log = os.path.join(dossier_root, "pipeline_error.log")
+lg = get_logger("etl", "ETL_error.log")
 
-lg.basicConfig(filename=fichier_log, level=lg.ERROR, format="%(asctime)s - %(levelname)s - %(message)s")
+
 
 dataframe = []
 df = None
@@ -25,5 +30,4 @@ try:
         raise ValueError("Aucun fichier valider")
 except Exception as e:
     lg.error(f"Erreur pipeline : {e}")
-
-
+    raise

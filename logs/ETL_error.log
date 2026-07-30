@@ -2,3 +2,7 @@
 2026-07-29 12:29:15,634 - ERROR - Erreur pipeline : Aucun fichier valider
 2026-07-29 12:35:03,260 - ERROR - Erreur de chargement csv Superstore 'utf-8' codec can't decode byte 0xa0 in position 2969: invalid start byte
 2026-07-29 12:35:03,260 - ERROR - Erreur pipeline : Aucun fichier valider
+2026-07-30 12:03:54,584 - ERROR - Erreur Pendant le chargement : Binder Error: Values list "s" does not have a column named "Ship"
+
+LINE 3: ..., p.id_dim_product, l.id_dim_location, sh.id_dim_shipping, s.Ship Date, s.sales, s.quantity, s.discount, s.profit
+                                                                      ^
