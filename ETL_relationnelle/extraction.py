@@ -1,24 +1,19 @@
 import pandas as pd
-import os
-import sys
+from pathlib import Path
 
-dossier_root =  os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(dossier_root)
-
+BASE_DIR = Path(__file__).resolve().parent.parent
+RAW_DIR = BASE_DIR / "data" / "raw"
+FICHIER_CSV = RAW_DIR / "Superstore.csv"
 from utils.logger import get_logger
 
-
-dossier_raw = os.path.join(dossier_root, "raw_data")
-
-fichier_superstore = os.path.join(dossier_raw, "Superstore.csv")
-lg = get_logger("etl", "ETL_error.log")
+lg = get_logger("etl_relationnelle", "ETL_error_relationnelle.log")
 
 
 
 dataframe = []
 df = None
 try: 
-    df_superstore = pd.read_csv(fichier_superstore, sep=',', encoding="utf-8-sig")
+    df_superstore = pd.read_csv(FICHIER_CSV, sep=',', encoding="cp1252")
     dataframe.append(df_superstore)
 except Exception as e:
     lg.error(f"Erreur de chargement csv Superstore {e}")

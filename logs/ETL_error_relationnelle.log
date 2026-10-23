@@ -1,0 +1,4 @@
+2026-10-22 14:39:01,048 - ERROR - Erreur de chargement csv Superstore 'utf-8' codec can't decode byte 0xa0 in position 2969: invalid start byte
+2026-10-22 14:39:01,048 - ERROR - Erreur pipeline : Aucun fichier valider
+2026-10-23 10:04:20,346 - ERROR - Erreur d'insertion dans categorie : Constraint Error: Duplicate key "categorie: Furniture" violates primary key constraint.
+2026-10-23 10:15:14,597 - ERROR - Erreur d'insertion dans categorie : Constraint Error: Duplicate key "categorie: Furniture" violates primary key constraint.

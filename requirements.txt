@@ -1,0 +1,10 @@
+pandas
+numpy
+duckdb
+requests
+matplotlib
+seaborn
+plotly
+scikit-learn
+joblib
+streamlit
