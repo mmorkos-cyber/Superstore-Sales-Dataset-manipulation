@@ -1,7 +1,5 @@
 # Superstore Sales
 
-Projet de fin de formation Développeur en IA chez Simplon Montpellier.
-
 L'idée de départ : à partir des ventes d'une enseigne américaine de fournitures (le dataset [Superstore Sales](https://www.kaggle.com/datasets/ishanshrivastava28/superstore-sales) sur Kaggle), est-ce qu'on peut prévoir le chiffre d'affaires du mois prochain, par catégorie de produit et par région ?
 
 Pour y répondre, j'ai monté toute la chaîne : récupération des données, deux bases DuckDB (une relationnelle, une en étoile), un modèle de prévision et un dashboard Streamlit. Le détail de la problématique, de mes hypothèses et des résultats est dans [docs/problematique.md](docs/problematique.md).
