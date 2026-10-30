@@ -6,5 +6,8 @@
             "database": "Superstore.db",
             "name": "Superstore DuckDB"
         }
+    ],
+    "python.analysis.extraPaths": [
+        "./dashboard"
     ]
 }

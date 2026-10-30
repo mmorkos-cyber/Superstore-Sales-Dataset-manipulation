@@ -6,6 +6,15 @@ import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+import streamlit as st
+from dashboard.onglets import (vue_kpi, dashboard_clients, dashboard_commerciale, dashboard_geographique, dashboard_logistique, dashboard_rentabilite, dashboard_temporelle, dashboard_prevision)
+from db import get_connection
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 FICHIER_MODELE = BASE_DIR / "data" / "modeles" / "prediction_ventes.joblib"
 
