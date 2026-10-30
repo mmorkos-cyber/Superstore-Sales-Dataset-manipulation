@@ -1,0 +1,17 @@
+{
+  "date_entrainement": "2026-10-30T10:24:59",
+  "annee_test": 2014,
+  "nb_lignes_entrainement": 428,
+  "nb_lignes_test": 144,
+  "modeles": {
+    "Random Forest": {
+      "mae": 2613.33,
+      "mape": 2.513
+    },
+    "Régression linéaire": {
+      "mae": 2372.26,
+      "mape": 1.1796
+    }
+  },
+  "modele_retenu": "Régression linéaire"
+}

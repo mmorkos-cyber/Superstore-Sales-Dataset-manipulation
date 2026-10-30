@@ -3,8 +3,3 @@ __pycache__/
 *.py[cod]
 
 # DuckDB database files
-*.db
-*.duckdb
-Superstore.db
-
-/data
