@@ -1,293 +1,149 @@
-# Superstore Sales — Prévision des ventes
+# Superstore Sales
 
-Projet de fin de formation **Développeur en Intelligence Artificielle** (Simplon Montpellier).
+Projet de fin de formation Développeur en IA chez Simplon Montpellier.
 
-À partir du jeu de données [Superstore Sales](https://www.kaggle.com/datasets/ishanshrivastava28/superstore-sales), ce projet met en place un pipeline de données complet : extraction des données brutes, modélisation dans une base relationnelle puis dans un modèle en étoile, entraînement d'un modèle de prévision des ventes, et tableau de bord interactif.
+L'idée de départ : à partir des ventes d'une enseigne américaine de fournitures (le dataset [Superstore Sales](https://www.kaggle.com/datasets/ishanshrivastava28/superstore-sales) sur Kaggle), est-ce qu'on peut prévoir le chiffre d'affaires du mois prochain, par catégorie de produit et par région ?
 
-**Problématique** : peut-on prévoir le chiffre d'affaires mensuel de Superstore, par catégorie de produit et par région, à partir de l'historique de ses ventes ?
+Pour y répondre, j'ai monté toute la chaîne : récupération des données, deux bases DuckDB (une relationnelle, une en étoile), un modèle de prévision et un dashboard Streamlit. Le détail de la problématique, de mes hypothèses et des résultats est dans [docs/problematique.md](docs/problematique.md).
 
-La problématique, les hypothèses et l'analyse des résultats sont détaillées dans [`docs/problematique.md`](docs/problematique.md).
+Dashboard en ligne : https://uqfm6vzd8qdvkdmg2z4vyn.streamlit.app/
 
----
+## Lancer le projet
 
-## Sommaire
-
-- [Pipeline](#pipeline)
-- [Structure du projet](#structure-du-projet)
-- [Installation](#installation)
-- [Utilisation](#utilisation)
-- [Modélisation des données](#modélisation-des-données)
-- [Modèle de prévision](#modèle-de-prévision)
-- [Tableau de bord](#tableau-de-bord)
-- [Technologies](#technologies)
-- [Défis et badges](#défis-et-badges)
-
----
-
-## Pipeline
-
-```
-Kaggle (CSV)
-    │  Étape 1 : téléchargement et extraction
-    ▼
-data/raw/Superstore.csv
-    │  Étape 2 : ETL relationnel (nettoyage, normalisation)
-    ▼
-Base relationnelle (DuckDB) — 6 tables normalisées
-    │  Étape 3 : ETL analytique (dénormalisation, dimension date)
-    ▼
-Base analytique (DuckDB) — modèle en étoile
-    │  Étape 4 : entraînement
-    ▼
-Modèle de prévision
-    │  Étape 5 : lancement du tableau de bord
-    ▼
-Tableau de bord Streamlit (lit la base analytique et le modèle)
-```
-
-1. **Téléchargement** : le jeu de données est téléchargé depuis Kaggle et extrait dans `data/raw/`. L'étape est ignorée si les fichiers sont déjà présents.
-2. **ETL relationnel** : lecture du CSV, conversion des dates, correction des codes postaux, découpage en 6 tables normalisées et chargement avec clés primaires et étrangères. L'étape est ignorée si la base est déjà remplie.
-3. **ETL analytique** : construction du modèle en étoile à partir de la base relationnelle, avec une dimension date continue et le calcul du délai d'expédition.
-4. **Entraînement** : agrégation mensuelle des ventes, comparaison de deux modèles et sauvegarde du meilleur.
-5. **Tableau de bord** : lancement de l'application Streamlit dans le navigateur.
-
----
-
-## Structure du projet
-
-```
-Superstore-Sales-Dataset-manipulation/
-├── dashboard/
-│   ├── app.py                         # Point d'entrée du tableau de bord Streamlit
-│   ├── db.py                          # Connexion à la base analytique
-│   └── onglets/                       # Un fichier par onglet du tableau de bord
-│       ├── vue_kpi.py
-│       ├── dashboard_clients.py
-│       ├── dashboard_commerciale.py
-│       ├── dashboard_geographique.py
-│       ├── dashboard_logistique.py
-│       ├── dashboard_rentabilite.py
-│       ├── dashboard_temporelle.py
-│       └── dashboard_prevision.py
-├── data/
-│   ├── raw/                           # Données brutes (CSV téléchargé)
-│   ├── db/                            # Bases DuckDB relationnelle et analytique
-│   └── modeles/                       # Modèle entraîné et rapport d'entraînement
-├── docs/
-│   ├── problematique.md               # Problématique, hypothèses et résultats
-│   ├── Dictionnaire_des_données.md    # Description de chaque table et colonne
-│   ├── MCD_Superstore.loo             # Source Looping du MCD
-│   ├── MCD_superstore.png             # Modèle conceptuel de données
-│   ├── MLD_superstore.png             # Modèle logique de données
-│   └── diagramme_en_etoile_base_analytique.png
-├── ETL_relationnelle/
-│   ├── extraction.py                  # Lecture du CSV
-│   ├── transform.py                   # Nettoyage et découpage en tables
-│   └── load.py                        # Création et alimentation de la base relationnelle
-├── ETL_analytique/
-│   ├── extraction_analytique.py       # Lecture de la base relationnelle
-│   ├── transform_analytique.py        # Construction des dimensions et de la table de faits
-│   └── load_analytique.py             # Création et alimentation du modèle en étoile
-├── ML/
-│   ├── exploration.py                 # Chargement des données et matrice de corrélation
-│   └── entrainement.py                # Entraînement, évaluation et sauvegarde du modèle
-├── tests/
-│   ├── test_etl_relationnelle.py      # Tests de la base relationnelle
-│   ├── test_etl_analytique.py         # Tests du modèle en étoile
-│   └── test_modele.py                 # Tests du modèle de prévision
-├── utils/
-│   ├── dl_fichier_raw.py              # Téléchargement du jeu de données
-│   └── logger.py                      # Configuration des logs
-├── logs/                              # Fichiers de logs des erreurs
-├── main.py                            # Lance le pipeline, les tests puis le tableau de bord
-├── requirements.txt
-└── README.md
-```
-
----
-
-## Installation
-
-**Prérequis** : Python 3.12 ou supérieur.
-
-1. Cloner le dépôt :
+Il faut Python 3.12 ou plus récent.
 
 ```bash
 git clone https://github.com/mmorkos-cyber/Superstore-Sales-Dataset-manipulation.git
 cd Superstore-Sales-Dataset-manipulation
-```
-
-2. Créer et activer un environnement virtuel (recommandé) :
-
-```bash
-python -m venv .venv
-.venv\Scripts\activate        # Windows
-source .venv/bin/activate     # macOS / Linux
-```
-
-3. Installer les dépendances :
-
-```bash
 python -m pip install -r requirements.txt
-```
-
-Aucune clé d'API Kaggle n'est nécessaire : le jeu de données est public et téléchargé directement.
-
----
-
-## Utilisation
-
-Toutes les commandes se lancent depuis la racine du projet.
-
-**Lancer le projet complet** (téléchargement, bases de données, entraînement, puis tableau de bord) :
-
-```bash
 python main.py
 ```
 
-**Lancer uniquement le tableau de bord**, une fois le pipeline exécuté au moins une fois :
+`main.py` fait tout dans l'ordre : il télécharge le CSV, construit les deux bases, entraîne le modèle, lance les tests entre chaque étape, puis ouvre le dashboard sur http://localhost:8501. Pas besoin de clé Kaggle, le dataset est public.
+
+Si les bases existent déjà et que vous voulez juste le dashboard :
 
 ```bash
 python -m streamlit run dashboard/app.py
 ```
 
-Le tableau de bord s'ouvre dans le navigateur, à l'adresse `http://localhost:8501`.
+J'utilise `python -m streamlit` plutôt que `streamlit` tout court parce que, sous Windows, la commande n'est pas toujours trouvée si le dossier des scripts Python n'est pas dans le PATH.
 
-**Afficher la matrice de corrélation** :
+Les erreurs sont écrites dans le dossier `logs/`.
 
-```bash
-python -m ML.exploration
+## Comment c'est organisé
+
+```
+├── api/                    API FastAPI qui sert les prévisions
+├── dashboard/
+│   ├── app.py              point d'entrée Streamlit, filtres et onglets
+│   ├── db.py               connexion à la base analytique
+│   └── onglets/            un fichier par onglet
+├── data/
+│   ├── raw/                CSV téléchargé (non versionné)
+│   ├── db/                 bases DuckDB
+│   └── modeles/            modèle entraîné + rapport d'entraînement
+├── docs/                   problématique, dictionnaire des données, MCD, MLD, schéma en étoile
+├── ETL_relationnelle/      CSV -> base relationnelle
+├── ETL_analytique/         base relationnelle -> modèle en étoile
+├── ML/                     exploration (matrice de corrélation) et entraînement
+├── tests/                  tests pytest de chaque étape
+├── utils/                  téléchargement du dataset et logger
+├── main.py
+├── Dockerfile
+├── docker-compose.yml
+└── requirements.txt
 ```
 
-Les erreurs du pipeline et du tableau de bord sont enregistrées dans le dossier `logs/`.
+## Les données
 
-> Sous Windows, la commande `streamlit` seule peut ne pas être reconnue si le dossier des scripts Python n'est pas dans le PATH. `python -m streamlit` fonctionne dans tous les cas.
+Le CSV de départ, c'est une seule table de 21 colonnes où tout se répète : le nom du client, la catégorie du produit, l'adresse… sur chaque ligne de commande. Il y a aussi quelques pièges : le fichier n'est pas en UTF-8 (il faut le lire en `cp1252`), les dates sont du texte, et pandas lit les codes postaux comme des nombres, donc `01040` devient `1040`. Tout ça est corrigé dans l'ETL.
 
----
+### Base relationnelle
+
+Je l'ai modélisée avec Merise sur Looping, puis découpée en 6 tables : `client`, `localisation`, `commande`, `ligne_commande`, `produit` et `sous_categorie`. Au début j'avais aussi une table `categorie`, mais elle ne contenait qu'un nom, donc je l'ai retirée et la catégorie est devenue un attribut de la sous-catégorie.
+
+Un point qui m'a fait changer le modèle : l'adresse est liée à la commande et pas au client, parce qu'un même client peut se faire livrer dans plusieurs villes.
+
+![MCD](docs/MCD_superstore.png)
+
+![MLD](docs/MLD_superstore.png)
+
+### Base analytique
+
+C'est celle que lisent le dashboard et le modèle. Une table de faits `Fact_Sales` (une ligne par ligne de commande : ventes, quantité, remise, profit, délai d'expédition) et cinq dimensions : date, client, produit, localisation et mode d'expédition.
+
+La dimension date contient tous les jours de la période, même ceux sans vente, pour ne pas avoir de trous dans les séries temporelles. Elle est utilisée deux fois par la table de faits : une pour la date de commande, une pour la date d'expédition.
+
+![Schéma en étoile](docs/diagramme_en_etoile_base_analytique.png)
+
+Toutes les colonnes sont décrites dans le [dictionnaire des données](docs/Dictionnaire_des_données.md).
+
+## Le modèle
+
+Je prévois le chiffre d'affaires mensuel pour chaque couple catégorie × région, à partir de l'année, du mois, de la catégorie et de la région. J'ai volontairement laissé de côté le profit et la quantité : on ne les connaît qu'une fois la vente faite, donc ils n'ont rien à faire dans une prévision.
+
+Les données sont découpées dans le temps : le modèle apprend sur les trois premières années et il est testé sur la dernière. J'ai comparé une régression linéaire et un Random Forest :
+
+| Modèle | MAE | MAPE |
+|---|---|---|
+| Régression linéaire | 2 372 $ | 118 % |
+| Random Forest | 2 610 $ | 251 % |
+
+La régression linéaire est gardée, mais honnêtement les résultats restent faibles : le modèle donne un ordre de grandeur, pas une prévision fiable. L'explication complète est dans [docs/problematique.md](docs/problematique.md).
+
+Le modèle est enregistré dans `data/modeles/prediction_ventes.joblib`, avec les scores de chaque entraînement dans `rapport_entrainement.json`.
+
+## Le dashboard
+
+Huit onglets : vue d'ensemble (KPI), clients, commercial, géographie (carte des ventes par état), logistique, rentabilité, évolution dans le temps, et prévision. Dans le panneau de gauche, on peut filtrer par année et par région ; les filtres s'appliquent partout sauf à l'onglet prévision, qui a ses propres choix de catégorie et de région.
+
+Ce que j'en retire :
+
+- Les ventes suivent le même cycle chaque année : creux en janvier-février, pics en septembre, novembre et décembre, et une baisse en octobre à chaque fois.
+- 2011 et 2012 se ressemblent, puis le chiffre d'affaires monte en 2013 et surtout en 2014.
+- Les remises coûtent cher : jusqu'à 20 % ça reste rentable, mais à partir de 30 % chaque niveau de remise fait perdre de l'argent.
+- Le segment Consumer représente un peu plus de la moitié des clients (51,6 %) et du chiffre d'affaires (environ 1,16 M$), et c'est aussi lui qui rapporte le plus de profit. Corporate arrive deuxième (environ 30 % des clients), Home Office troisième (environ 19 %).
+- Phones et Chairs dominent les ventes avec plus de 300 000 $ chacune. Mais vendre beaucoup ne veut pas dire gagner beaucoup : Tables est la 4e sous-catégorie en chiffre d'affaires et pourtant la plus déficitaire (environ −18 000 $), suivie de Bookcases et Supplies. À l'inverse, Copiers n'est que 8e en ventes mais c'est la plus rentable, avec environ 55 000 $ de profit.
+- Les ventes sont très concentrées : la Californie arrive largement en tête, devant l'État de New York, puis le Texas et l'État de Washington. Une grande partie des états du centre du pays pèse très peu.
+- Standard Class représente environ 60 % des commandes (2 994 sur 5 009), pour un délai moyen de 5 jours. First Class et Second Class tournent autour de 2 et 3 jours, et Same Day part le jour même, mais ne concerne que 264 commandes.
 
 ## Tests
-
-Les tests vérifient la qualité des données à chaque étape du pipeline :
-
-- **ETL relationnel** : codes postaux sur 5 caractères, unicité des clés primaires, validité des clés étrangères, aucune ligne perdue, conversion des dates.
-- **ETL analytique** : dimension date continue et sans doublon, cohérence des week-ends, clés de dates présentes dans `Dim_Date`, délais d'expédition positifs, mesures sans valeur manquante.
-- **Modèle** : 12 prévisions numériques pour une année, prise en charge d'une catégorie inconnue.
-
-Ils sont exécutés automatiquement par `main.py` après chaque étape : le pipeline s'arrête si un test échoue. Pour les lancer séparément :
 
 ```bash
 python -m pytest -v
 ```
 
-## Modélisation des données
+Les tests vérifient les données après chaque étape : clés primaires uniques, clés étrangères valides, aucune ligne perdue, codes postaux sur 5 caractères, calendrier sans jour manquant, délais d'expédition positifs, et un modèle qui renvoie bien 12 prévisions. `main.py` les lance aussi entre les étapes et s'arrête si l'un d'eux échoue.
 
-### Base relationnelle (Merise)
+## API et Docker
 
-Le CSV d'origine est une table unique de 21 colonnes, où les informations sur les clients, les produits et les adresses se répètent sur chaque ligne. Il est découpé en 6 tables normalisées :
+L'API expose le modèle sur deux routes : `/health` pour vérifier qu'elle tourne, et `/prevision` qui renvoie les 12 mois prévus pour une catégorie, une région et une année.
 
-| Table | Contenu |
-|---|---|
-| `sous_categorie` | Sous-catégories de produits et leur catégorie |
-| `produit` | Catalogue des produits |
-| `client` | Clients et segment |
-| `localisation` | Adresses de livraison |
-| `commande` | Commandes (dates, mode d'expédition, client, adresse) |
-| `ligne_commande` | Produits de chaque commande, avec montant, quantité, remise et profit |
+```bash
+python -m uvicorn api.main:app --reload
+```
 
-Le MCD et le MLD ont été réalisés avec Looping (`docs/MCD_Superstore.loo`).
+La doc interactive est sur http://localhost:8000/docs. Exemple de requête :
 
-**Modèle conceptuel de données (MCD)**
+```json
+{ "categorie": "Furniture", "region": "West", "annee": 2015 }
+```
 
-![MCD](docs/MCD_superstore.png)
+Pour tout lancer avec Docker (dashboard sur le port 8501, API sur le 8000) :
 
-**Modèle logique de données (MLD)**
+```bash
+docker compose up -d --build
+```
 
-![MLD](docs/MLD_superstore.png)
+L'image utilise la base analytique et le modèle présents dans `data/`, donc il faut avoir lancé `main.py` au moins une fois avant.
 
-### Base analytique (modèle en étoile)
+## Stack
 
-Le modèle en étoile est optimisé pour l'analyse et le tableau de bord. La table de faits contient une ligne par ligne de commande.
-
-![Modèle en étoile](docs/diagramme_en_etoile_base_analytique.png)
-
-| Table | Rôle |
-|---|---|
-| `Fact_Sales` | Mesures : ventes, quantité, remise, profit, délai d'expédition |
-| `Dim_Date` | Calendrier continu (année, trimestre, mois, semaine, jour) |
-| `Dim_Customer` | Clients et segment |
-| `Dim_Product` | Produit, sous-catégorie et catégorie |
-| `Dim_Location` | Pays, état, ville, région, code postal |
-| `Dim_Shipping` | Mode d'expédition |
-
-Le détail de chaque colonne est disponible dans le [dictionnaire des données](docs/Dictionnaire_des_données.md).
-
----
-
-## Modèle de prévision
-
-- **Cible** : chiffre d'affaires mensuel par catégorie et par région.
-- **Variables** : année, mois, catégorie de produit, région.
-- **Découpage** : entraînement sur les trois premières années, test sur la dernière.
-- **Modèles comparés** : régression linéaire et Random Forest (scikit-learn), avec encodage des variables catégorielles dans un pipeline.
-- **Évaluation** : MAE (erreur moyenne en dollars) et MAPE (erreur moyenne en pourcentage).
-
-Le meilleur modèle est sauvegardé dans `data/modeles/prediction_ventes.joblib`, et les scores de chaque entraînement dans `data/modeles/rapport_entrainement.json`. Il est utilisé dans l'onglet Prévision du tableau de bord. L'interprétation des résultats se trouve dans [`docs/problematique.md`](docs/problematique.md).
-
----
-
-## Tableau de bord
-
-### Onglets
-
-| Onglet | Contenu |
-|---|---|
-| Vue KPI | Chiffre d'affaires, profit, marge et nombre de commandes ; évolution mensuelle du CA et du profit |
-| Clients | Répartition des clients par segment, CA et profit par segment, top 10 des clients |
-| Commerciale | CA par catégorie et par sous-catégorie, top 10 des produits |
-| Géographique | Carte du chiffre d'affaires par état |
-| Logistique | Nombre de commandes et délai moyen par mode d'expédition |
-| Rentabilité | Profit et marge par catégorie, profit par sous-catégorie, impact des remises, produits les moins rentables |
-| Temporelle | CA annuel et évolution, tendance mensuelle, saisonnalité |
-| Prévision | Prévision du CA mensuel de l'année suivante, par catégorie et par région, comparée à l'historique |
-
-### Filtres
-
-Le panneau latéral permet de filtrer les données par **année** et par **région**. Les filtres s'appliquent à tous les onglets, sauf à l'onglet Prévision, qui dispose de ses propres sélecteurs de catégorie et de région et affiche toujours l'historique complet.
-
-### Principaux enseignements
-
-- **Saisonnalité** : le profil des ventes se répète chaque année. Janvier et février sont les mois les plus faibles, et les pics se situent en septembre, novembre et décembre, avec un creux récurrent en octobre.
-- **Tendance** : 2011 et 2012 sont à des niveaux proches, puis le chiffre d'affaires progresse en 2013 et surtout en 2014, année la plus forte de juin à novembre.
-- **Remises** : les ventes sans remise génèrent la grande majorité du profit, et les remises de 10 % à 20 % restent rentables. À partir de 30 % de remise, tous les niveaux sont déficitaires.
-- **Clients** : [à compléter à partir de l'onglet Clients : quel segment apporte le plus de CA et de profit ?]
-- **Produits** : [à compléter à partir des onglets Commerciale et Rentabilité : quelles sous-catégories vendent le plus, et lesquelles perdent de l'argent ?]
-- **Géographie** : [à compléter à partir de l'onglet Géographique : quels états concentrent les ventes ?]
-- **Logistique** : [à compléter à partir de l'onglet Logistique : mode d'expédition le plus utilisé et écart de délai entre les modes.]
-
----
-
-## Technologies
-
-| Domaine | Outils |
-|---|---|
-| Langage | Python |
-| Données | pandas, NumPy |
-| Base de données | DuckDB |
-| Machine learning | scikit-learn, joblib |
-| Visualisation | Plotly, Matplotlib, Seaborn |
-| Tableau de bord | Streamlit |
-| Modélisation | Looping (MCD/MLD) |
-
----
+Python, pandas, DuckDB, scikit-learn, Streamlit, Plotly, FastAPI, Docker, pytest. MCD et MLD faits avec Looping.
 
 ## Défis et badges
 
-**Défis réalisés** : Star Schema, Merise (MCD/MLD), Streamlit, DuckDB, Random Forest, comparaison de plusieurs modèles, régression linéaire, matrice de corrélation.
+Défis : Star Schema, Merise, Streamlit, DuckDB, Random Forest, régression linéaire, comparaison de modèles, matrice de corrélation, Docker, déploiement, tests.
 
-| Badge | Réalisation |
-|---|---|
-| Data Engineer | ETL complet, bases alimentées automatiquement, DuckDB |
-| Data Architect | MCD/MLD, dictionnaire des données, modèle en étoile |
-| Data Analyst | KPI, visualisations, tableau de bord interactif avec filtres, analyse des résultats |
-| IA | Préparation des données, entraînement et évaluation de modèles scikit-learn, prévision intégrée au tableau de bord |
-| Développeur Data | Application Streamlit, code Python structuré |
+Badges visés : Data Engineer, Data Architect, Data Analyst, IA, Développeur Data, Qualité & Industrialisation, Cloud & Déploiement.

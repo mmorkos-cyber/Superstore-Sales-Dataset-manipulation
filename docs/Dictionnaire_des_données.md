@@ -60,9 +60,9 @@ Commandes passées par les clients (une ligne par commande).
 
 | Colonne | Type | Contraintes | Description | Exemple | Colonne source |
 |---|---|---|---|---|---|
-| `commande_id` | TEXT | PK | Identifiant unique de la commande | `CA-2013-152156` | Order ID |
-| `date_commande` | DATE | NN | Date de passage de la commande | `2013-11-09` | Order Date |
-| `date_expedition` | DATE | NN | Date d'expédition de la commande | `2013-11-12` | Ship Date |
+| `commande_id` | TEXT | PK | Identifiant unique de la commande | `CA-2011-100006` | Order ID |
+| `date_commande` | DATE | NN | Date de passage de la commande | `2011-09-07` | Order Date |
+| `date_expedition` | DATE | NN | Date d'expédition de la commande | `2011-09-13` | Ship Date |
 | `mode_expedition` | TEXT | NN | Mode de livraison (`Standard Class`, `Second Class`, `First Class`, `Same Day`) | `Second Class` | Ship Mode |
 | `client_id` | TEXT | FK → `client(client_id)`, NN | Client ayant passé la commande | `CG-12520` | Customer ID |
 | `localisation_id` | INTEGER | FK → `localisation(localisation_id)`, NN | Adresse de livraison de la commande | `1` | — (calculé) |
