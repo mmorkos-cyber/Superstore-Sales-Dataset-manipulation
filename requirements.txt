@@ -8,3 +8,6 @@ plotly
 scikit-learn
 joblib
 streamlit
+pytest
+fastapi
+uvicorn

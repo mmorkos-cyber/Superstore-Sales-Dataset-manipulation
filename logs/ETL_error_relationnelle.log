@@ -2,3 +2,7 @@
 2026-10-22 14:39:01,048 - ERROR - Erreur pipeline : Aucun fichier valider
 2026-10-23 10:04:20,346 - ERROR - Erreur d'insertion dans categorie : Constraint Error: Duplicate key "categorie: Furniture" violates primary key constraint.
 2026-10-23 10:15:14,597 - ERROR - Erreur d'insertion dans categorie : Constraint Error: Duplicate key "categorie: Furniture" violates primary key constraint.
+2026-10-29 14:53:20,958 - ERROR - Erreur de chargement csv Superstore [Errno 2] No such file or directory: 'C:\\Users\\Utilisateur\\Desktop\\Brief_23_Projet_consolidation\\Superstore-Sales-Dataset-manipulation\\data\\raw\\Superstore.csv'
+2026-10-29 14:53:20,959 - ERROR - Erreur pipeline : Aucun fichier valider
+2026-10-29 14:54:31,068 - ERROR - Erreur de chargement csv Superstore [Errno 2] No such file or directory: 'C:\\Users\\Utilisateur\\Desktop\\Brief_23_Projet_consolidation\\Superstore-Sales-Dataset-manipulation\\data\\raw\\Superstore.csv'
+2026-10-29 14:54:31,068 - ERROR - Erreur pipeline : Aucun fichier valider

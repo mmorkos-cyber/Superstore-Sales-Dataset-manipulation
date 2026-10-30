@@ -24,11 +24,6 @@ def prepa_df_localisation():
     return df_localisation
 
 
-def prepa_df_category():
-    df_category = (df[["Category"]].drop_duplicates().rename(columns={"Category": "categorie"}))
-    return df_category
-
-
 def prepa_df_sous_category():
     df_sous_category = (df[["Sub-Category", "Category"]].drop_duplicates().rename(columns={"Sub-Category": "sous_categorie", "Category": "categorie"}))
     return df_sous_category

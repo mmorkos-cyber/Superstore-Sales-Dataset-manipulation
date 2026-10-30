@@ -1,0 +1,12 @@
+.git
+.gitignore
+.vscode
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+logs/*.log
+data/raw
+data/archive
+data/db/Superstore_relationnelle.db
+*.wal

@@ -1,0 +1,18 @@
+2026-10-29 14:46:29,487 - ERROR - Erreur durant la saisie des KPIs general : Connection Error: Connection already closed!
+2026-10-29 14:46:29,575 - ERROR - Erreur extraction performance segments clients : Connection Error: Connection already closed!
+2026-10-29 14:46:29,578 - ERROR - Erreur extraction vente de categorie : Connection Error: Connection already closed!
+2026-10-29 14:46:29,579 - ERROR - Erreur extraction vente de sous-categorie : Connection Error: Connection already closed!
+2026-10-29 14:46:29,581 - ERROR - Erreur extraction performance produits : Connection Error: Connection already closed!
+2026-10-29 14:46:29,583 - ERROR - Erreur extraction ventes par état : Connection Error: Connection already closed!
+2026-10-29 14:46:29,586 - ERROR - Erreur extraction performance modes expédition : Connection Error: Connection already closed!
+2026-10-29 14:46:29,587 - ERROR - Erreur extraction délai expédition : Connection Error: Connection already closed!
+2026-10-29 14:46:29,589 - ERROR - Erreur extraction rentabilité par catégorie : Connection Error: Connection already closed!
+2026-10-29 14:46:29,591 - ERROR - Erreur extraction rentabilité par sous-catégorie : Connection Error: Connection already closed!
+2026-10-29 14:46:29,592 - ERROR - Erreur extraction rentabilité par remise : Connection Error: Connection already closed!
+2026-10-29 14:46:29,594 - ERROR - Erreur extraction produits les moins rentables : Connection Error: Connection already closed!
+2026-10-29 14:46:29,596 - ERROR - Erreur extraction évolution temporelle : Connection Error: Connection already closed!
+2026-10-29 14:46:35,841 - ERROR - Erreur extraction ventes mensuelles : Connection Error: Connection already closed!
+2026-10-29 15:05:55,206 - ERROR - Erreur de chargement de la BDD IO Error: Cannot open file "C:\Users\Utilisateur\Desktop\Brief_23_Projet_consolidation\Superstore-Sales-Dataset-manipulation\data\db\Superstore_analytique.db": Le processus ne peut pas accéder au fichier car ce fichier est utilisé par un autre processus.
+
+File is already open in 
+C:\Python314\python.exe (PID 22336)
